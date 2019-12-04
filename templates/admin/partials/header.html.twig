@@ -1,0 +1,50 @@
+<header>
+    {% if app.user is not null %}
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="accueil"><img src="{{ asset('assets/logo/logo-lettres-90px.png') }}" alt="logo du site sylvain-guerrin.fr"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="accueil">Dashboard</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="realisations">Articles</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="competences">Tags</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="contact">Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_deconnexion') }}">Déconnexion</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <img src="{{ asset('assets/logo/logo-lettres-90px.png') }}" alt="logo du site sylvain-guerrin.fr">
+                <h2 class="text-white">Espace d'administration</h2>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</header>
+{% for label, messages in app.flashes %}
+    <div class="container text-center pt-5">
+        <div class="alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message | raw }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
