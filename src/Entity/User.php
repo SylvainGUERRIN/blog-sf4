@@ -6,10 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+// * @Vich\Uploadable()
  * @UniqueEntity(
  *     fields={"mail"},
  *     message="Cet email est déjà utilisé !"
@@ -64,9 +69,29 @@ class User implements UserInterface, \Serializable
      */
     private $articles;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updated_at;
+
+//    /**
+//     * @var File
+//     * @Assert\Image(
+//     *     mimeTypes={"image/jpeg", "image/jpg", "image/png", "image/svg"}
+//     * )
+//     * @Vich\UploadableField(mapping="avatar_image", fileNameProperty="avatar_file")
+//     */
+//    private $imageFile;
+
+//    /**
+//     * @ORM\Column(type="string", length=255, nullable=true)
+//     */
+//    private $avatar_file;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+//        $this->avatar = new arrayCollection();
     }
 
     public function getId(): ?int
@@ -151,7 +176,7 @@ class User implements UserInterface, \Serializable
         return $this->avatar;
     }
 
-    public function setAvatar(?Avatar $avatar): self
+    public function setAvatar(?Avatar $avatar)
     {
         $this->avatar = $avatar;
 
@@ -166,7 +191,7 @@ class User implements UserInterface, \Serializable
         return $this->articles;
     }
 
-    public function addArticle(Article $article): self
+    public function addArticle(Article $article)
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
@@ -176,7 +201,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function removeArticle(Article $article): self
+    public function removeArticle(Article $article)
     {
         if ($this->articles->contains($article)) {
             $this->articles->removeElement($article);
@@ -245,4 +270,47 @@ class User implements UserInterface, \Serializable
         // add $this->salt too if you don't use Bcrypt or Argon2i
         [$this->id, $this->username, $this->mail, $this->pass] = unserialize($serialized, ['allowed_classes' => false]);
     }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getAvatarFile(): ?string
+    {
+        return $this->avatar_file;
+    }
+
+    public function setAvatarFile(?string $avatar_file): void
+    {
+        $this->avatar_file = $avatar_file;
+    }
+
+//    /**
+//     * @return File|null
+//     */
+//    public function getImageFile(): ?File
+//    {
+//        return $this->imageFile;
+//    }
+//
+//    /**
+//     * @param File|UploadedFile $imageFile
+//     * @throws \Exception
+//     */
+//    public function setImageFile(?File $imageFile = null): void
+//    {
+//        $this->imageFile = $imageFile;
+//        if(null !== $imageFile){
+//            $this->updated_at = new \DateTime('now');
+//        }
+//    }
+
 }

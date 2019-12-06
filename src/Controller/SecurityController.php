@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Avatar;
 use App\Entity\User;
 use App\Form\InscriptionType;
 use App\Form\AccountType;
@@ -112,22 +113,26 @@ class SecurityController extends AbstractController
     {
         $user = $this->getUser();
 //        $oldImage = $user->getAvatarUrl();
+//        $avatar = new Avatar();
 
         $form = $this->createForm(AccountType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-//            $uploadedFile = $form['avatarurl']->getData();
+//            dd($request);
+//            $uploadedFile = $form['urlavatar']->getData();
 //            if ($uploadedFile) {
 //                $file = $form->get('avatarurl')->getData();
 //                $fileId = $user->getId();
 //                $name = $user->getUsername();
 //                $finalName = $fileUploader->upload($file, $name, $fileId, $oldImage);
-//
+//                dd($form->getData());
 //                $user->setAvatarUrl($finalName);
 //            }
+//            dd($form->getData());
+
+            $user->setUpdatedAt(new DateTime('now'));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
