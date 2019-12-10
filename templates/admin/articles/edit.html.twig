@@ -1,6 +1,10 @@
 {% extends 'admin/partials/base.html.twig' %}
 {% block title %}Editer l'article{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css">
+{% endblock %}
+
 {% block body %}
     <div class="container">
         <div class="row mt-5">
@@ -45,4 +49,11 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+    <script>
+        $('select').select2();
+    </script>
 {% endblock %}

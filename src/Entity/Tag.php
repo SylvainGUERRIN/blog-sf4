@@ -2,12 +2,19 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
+ * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *     fields={"name"},
+ *     message="Un autre catégorie posséde déjà ce titre, merci de le modifier"
+ * )
  */
 class Tag
 {
@@ -110,5 +117,25 @@ class Tag
         }
 
         return $this;
+    }
+
+    /**
+     * Permet d'initialiser un slug
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     * @return void
+     */
+    public function initializeSlug(): void
+    {
+        if(empty($this->slug)){
+            $slugify = new Slugify();
+            $this->slug = $slugify->slugify($this->name);
+        }
+        if(!empty($this->slug)){
+            $slugify = new Slugify();
+            $this->slug = $slugify->slugify($this->name);
+        }
     }
 }

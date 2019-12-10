@@ -36,7 +36,13 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ article.content | slice(0,30) }}...</td>
-                                <td>{% if article.tags is not null %}faire une boucle dedans pour sortir tous les tags{% else %}Cet article n'a pas encore de catégorie{% endif %}</td>
+                                <td>{% if article.tags is not null %}
+                                        {% for tag in article.tags %}
+                                            {{ tag.name }} <br>
+                                        {% endfor %}
+                                    {% else %}
+                                        Cet article n'a pas encore de catégorie
+                                    {% endif %}</td>
                                 <td>{% if article.user is not null %}{{ article.user.username }}{% else %}Cet article n'a pas encore d'auteur{% endif %}</td>
                                 <td>{{ article.articleCreatedAt | date("d/m/Y H:i:s") }}</td>
                                 <td>{% if article.articleModifiedAt is not null %}{{ article.articleModifiedAt | date("d/m/Y H:i:s") }}{% else %}Cet article n'a pas encore été modifié{% endif %}</td>
