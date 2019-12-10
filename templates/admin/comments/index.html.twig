@@ -1,0 +1,60 @@
+{% extends 'admin/partials/base.html.twig' %}
+{% block title %} Gestion des commentaires {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row mt-5 mb-5">
+            <div class="col-12">
+                <table class="table table-hover table-striped table-responsive">
+                    <thead>
+                        <th>auteur du commentaire</th>
+                        <th>date du commentaire</th>
+                        <th>article du commentaire</th>
+                        <th>contenu du commentaire</th>
+                        <th>activer</th>
+                        <th>suspendre</th>
+                        <th>supprimer</th>
+                    </thead>
+                    <tbody>
+                    {% if comments is not null and comments is not empty %}
+                        {% for comment in comments %}
+                            <tr>
+                                <td>{{ comment.user.username }}</td>
+                                <td>{{ comment.commentCreatedAt | date("d/m/Y H:i:s") }}</td>
+                                <td>{{ comment.article.title }}</td>
+                                <td>{{ comment.content | slice(0,30) }}...</td>
+
+                                <td>
+                                    <a id="{{ comment.id }}" href="{# {{ path('article_edit', {'slug': article.slug}) }} #}" class="btn btn-primary
+                                    {% if comment.activation == 1 %}disabled{% endif %} activation">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a id="{{ comment.id }}" href="{# {{ path('article_edit', {'slug': article.slug}) }} #}" class="btn btn-primary
+                                    {% if comment.activation == 0 %}disabled{% endif %} desactivation">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('comment_delete', {'id': comment.id}) }}" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7">Pas de commentaires pour le moment.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 nav-pagination">
+                {{ knp_pagination_render(comments) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

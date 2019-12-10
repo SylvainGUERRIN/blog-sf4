@@ -25,7 +25,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% if articles is not null %}
+                    {% if articles is not null and articles is not empty %}
                         {% for article in articles %}
                             <tr>
                                 <td>{{ article.title }}</td>
@@ -58,6 +58,10 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7">Pas de commentaires pour le moment.</td>
+                        </tr>
                     {% endif %}
                     </tbody>
                 </table>

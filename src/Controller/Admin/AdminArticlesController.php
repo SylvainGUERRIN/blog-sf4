@@ -8,9 +8,12 @@ use App\Entity\Article;
 use App\Form\ArticleEditType;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentRepository;
+use App\Repository\TagRepository;
 use App\Repository\UserRepository;
 use DateTime;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,12 +31,26 @@ class AdminArticlesController extends AbstractController
 {
     /**
      * @Route("/", name="dashboard")
+     * @param ArticleRepository $articleRepository
+     * @param TagRepository $tagRepository
+     * @param CommentRepository $commentRepository
      * @return Response
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
-    public function dashboard(): Response
+    public function dashboard(
+        ArticleRepository $articleRepository,
+        TagRepository $tagRepository,
+        CommentRepository $commentRepository
+    ): Response
     {
 
-        return $this->render('admin/articles/dashboard.html.twig');
+        return $this->render('admin/articles/dashboard.html.twig', [
+            'articles' => $articleRepository->findLatest(4),
+            'nbArticles' => $articleRepository->countNbArticles(),
+            'nbCategories' => $tagRepository->countNbCategories(),
+            'nbComments' => $commentRepository->countNbComments()
+        ]);
     }
 
     /**
@@ -43,6 +60,7 @@ class AdminArticlesController extends AbstractController
      * @param PaginatorInterface $paginator
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function index(ArticleRepository $repoArticles, PaginatorInterface $paginator, Request $request): Response
     {

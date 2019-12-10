@@ -36,6 +36,16 @@ class Comment
      */
     private $article;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $comment_created_at;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $activation;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +95,30 @@ class Comment
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getCommentCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->comment_created_at;
+    }
+
+    public function setCommentCreatedAt(?\DateTimeInterface $comment_created_at): self
+    {
+        $this->comment_created_at = $comment_created_at;
+
+        return $this;
+    }
+
+    public function getActivation(): ?bool
+    {
+        return $this->activation;
+    }
+
+    public function setActivation(bool $activation): self
+    {
+        $this->activation = $activation;
 
         return $this;
     }

@@ -2,5 +2,104 @@
 {% block title %}Dashboard{% endblock %}
 
 {%  block body %}
-    <h1>Bienvenue sur l'espace d'administration</h1>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <h1>Les statistiques</h1>
+            </div>
+        </div>
+        <div class="row mt-3 mb-5">
+            <div class="col">
+                <div class="card bg-primary text-white mb-3 text-center">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h1 class="card-title">{{ nbArticles }} articles</h1>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <a href="{{ path('article_create') }}" class="btn btn-color">Créer un nouvel article</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card text-white bg-primary mb-3 text-center">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h1 class="card-title">{{ nbComments }} commentaires</h1>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <a href="{{ path('back-commentaires') }}" class="btn btn-color">Gérer les commentaires</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card text-white bg-primary mb-3 text-center">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h1 class="card-title">{{ nbCategories }} catégories</h1>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <a href="{{ path('categorie_create') }}" class="btn btn-color">Créer une nouvelle catégorie</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 text-center">
+                <h1>Les quatre derniers articles</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="{{ path('article_create') }}" class="btn btn-color">Ajouter un nouvel article</a>
+            </div>
+        </div>
+        <div class="row mt-5 mb-5">
+            {% for article in articles %}
+                <div class="col-sm-12 col-md-6 col-lg-3 display-card">
+                    <div class="card border-color" style="max-width: 20rem;">
+                        <div class="card-header">
+                            {% if vich_uploader_asset(article, 'imageFile') is not null %}
+                                <img src="{{ vich_uploader_asset( article, 'imageFile')| imagine_filter('medium') }}" alt="image de l'article" class="img-vignette">
+                            {% else %}
+                                <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut">
+                            {% endif %}
+                        </div>
+                        <div class="card-body text-center">
+                            <h3 class="white-title text-center">{{ article.title }}</h3>
+                            <p class="card-text">{{ article.content|striptags|slice(0,100)|raw }}...</p>
+                            <a class="btn btn-color" href="{{ path('article_edit', {'slug': article.slug}) }}">Modifier l'article</a>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>Tags: faire une boucle</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>Crée le {{ article.articleCreatedAt | date('d/m/Y') }} à {{ article.articleCreatedAt | date('H:i:s') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
+
