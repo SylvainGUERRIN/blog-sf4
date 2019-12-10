@@ -5,11 +5,13 @@ namespace App\Controller\Admin;
 
 
 use App\Entity\Article;
+use App\Form\ArticleEditType;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,17 +40,17 @@ class AdminArticlesController extends AbstractController
      * @Route("/articles", name="back-articles")
      * page qui affiche tous les articles
      * @param ArticleRepository $repoArticles
+     * @param PaginatorInterface $paginator
+     * @param Request $request
      * @return Response
      */
-    public function index(ArticleRepository $repoArticles): Response
+    public function index(ArticleRepository $repoArticles, PaginatorInterface $paginator, Request $request): Response
     {
-//        $pagination->setEntityClass(Article::class)
-//            ->setCurrentPage($page);
-//        dd($pagination);
-        $articles = $repoArticles->findAllRecent();
-//        dd($articles);
+        $articles = $paginator->paginate(
+            $repoArticles->findAllRecent(),
+            $request->query->getInt('page', 1),
+            10);
         return $this->render('admin/articles/index.html.twig', [
-//            'pagination' => $pagination,
             'articles' => $articles,
         ]);
     }
@@ -59,12 +61,11 @@ class AdminArticlesController extends AbstractController
      * @Route("/article/new", name="article_create")
      *
      * @param Request $request
-     * @param ObjectManager $manager
      * @param UserRepository $repo
      * @return Response
      * @throws \Exception
      */
-    public function create(Request $request, ObjectManager $manager, UserRepository $repo): Response
+    public function create(Request $request, UserRepository $repo): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
@@ -79,12 +80,14 @@ class AdminArticlesController extends AbstractController
             $article->setArticleCreatedAt(new DateTime('now'));
             $article->setUser($userAdmin);
 
-            $manager->persist($article);
-            $manager->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
 
             $this->addFlash('success',
                 "L'article <strong>{$article->getTitle()}</strong> a bien été enregistrée !"
             );
+
             return $this->redirectToRoute('back-articles', [
                 'slug' => $article->getSlug()
             ]);
@@ -93,5 +96,60 @@ class AdminArticlesController extends AbstractController
         return $this->render('admin/articles/new.html.twig',[
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Article $article
+     * @param Request $request
+     * @return Response
+     * @Route("/article/edit/{slug}", name="article_edit")
+     * @throws \Exception
+     */
+    public function edit(
+        Article $article,
+        Request $request
+    ): Response
+    {
+        $form = $this->createForm(ArticleEditType::class, $article);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $article->setArticleModifiedAt(new DateTime('now'));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            $this->addFlash('success',
+                "L'article <strong>{$article->getTitle()}</strong> a bien été modifié !"
+            );
+            return $this->redirectToRoute('back-articles', [
+                //'slug' => $article->getSlug()
+            ]);
+
+        }
+        return $this->render('admin/articles/edit.html.twig', [
+            'form' => $form->createView(),
+            'article' => $article
+        ]);
+    }
+
+    /**
+     * @param Article $article
+     * @return RedirectResponse
+     * @Route("/article/delete/{slug}", name="article_delete")
+     */
+    public function delete(Article $article): RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($article);
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            "L'article <strong>{$article->getTitle()}</strong> a  bien été supprimé !"
+        );
+        return $this->redirectToRoute('back-articles');
     }
 }

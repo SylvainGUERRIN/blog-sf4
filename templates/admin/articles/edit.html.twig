@@ -1,0 +1,48 @@
+{% extends 'admin/partials/base.html.twig' %}
+{% block title %}Editer l'article{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12">
+                {{ form_start(form) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.slug) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                {% if article.imgLeadUrl is not null %}
+                    <img src="{{ vich_uploader_asset( article, 'imageFile')| imagine_filter('medium') }}" alt="image de l'article" >
+                {% else %}
+                    Cet article n'a pas encore d'image
+                {% endif %}
+            </div>
+            <div class="col-8">
+                {{ form_row(form.imageFile) }}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                {{ form_row(form.content) }}
+                {{ form_row(form.tags) }}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6">
+                {{ form_row(form.article_created_at) }}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                {{ form_row(form.user) }}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <button type="submit" class="btn btn-color">Enregistrer les modifications</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

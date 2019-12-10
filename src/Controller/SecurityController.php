@@ -108,6 +108,7 @@ class SecurityController extends AbstractController
      * @Route("/profil", name="admin_profil")
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function profil(Request $request): Response
     {
@@ -186,7 +187,7 @@ class SecurityController extends AbstractController
                 "Votre mot de passe a bien été modifié !"
             );
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('dashboard');
         }
 
         return $this->render('admin/account/pass.html.twig', [

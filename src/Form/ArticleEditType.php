@@ -3,10 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Article;
-use App\Entity\Category;
-use App\Entity\SubCategory;
+use App\Entity\Tag;
 use App\Entity\User;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -47,39 +45,20 @@ class ArticleEditType extends AbstractType
                     ])
                 ]
             ])
-            ->add('content', CKEditorType::class, [
-                'config' => array(
-                    'toolbar' => 'standard',
-                    'input_sync' => true,
-                    'uiColor' => '#f7f7f7',
-                ),
+            ->add('content', TextareaType::class, [
                 'label' => "Contenu de l'article",
-//                'attr' => ['placeholder' => "Mettez le contenu de l'article"]
-            ])
-            ->add('descriptionCode', CKEditorType::class, [
-                'config' => array(
-                    'toolbar' => 'standard',
-                    'input_sync' => true,
-                    'uiColor' => '#f7f7f7',
-                ),
-                'label' => "Contenu de la description",
+                'attr' => ['placeholder' => "Mettez le contenu de l'article"]
             ])
             ->add('article_created_at', DateTimeType::class, [
                 'label' => "Date de création de l'article",
             ])
             //->add('article_modified_at') enregistrer automatiquement à la validation du formulaire
-            ->add('category', EntityType::class, [
-                'label' => "Choississez la catégorie correspondant à l'article",
+            ->add('tags', EntityType::class, [
+                'label' => "Choississez le tag correspondant à l'article",
                 'required' => false,
-                'class' => Category::class,
-                'choice_label' => 'name'
-            ])
-            ->add('subcategory', EntityType::class, [
-                'label' => "Choississez la sous-catégorie correspondant à l'article",
-                'required' => false,
-                'class' => SubCategory::class,
-                'choice_label' => 'title',
-                //'multiple' => true
+                'class' => Tag::class,
+                'choice_label' => 'name',
+                'multiple' => true
             ])
             ->add('user', EntityType::class,[
                 'label' => "Choississez l'auteur de l'article",

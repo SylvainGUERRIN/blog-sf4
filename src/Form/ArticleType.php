@@ -3,9 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Article;
-use App\Entity\Category;
-use App\Entity\SubCategory;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -46,36 +44,18 @@ class ArticleType extends AbstractType
                     ])
                 ]
             ])
-            ->add('content', CKEditorType::class, [
-                'config' => array(
-                    'toolbar' => 'standard',
-                    'input_sync' => true,
-                    'uiColor' => '#f7f7f7',
-                ),
+            ->add('content', TextareaType::class, [
                 'label' => "Contenu de l'article",
-            ])
-            ->add('descriptionCode', CKEditorType::class, [
-                'config' => array(
-                    'toolbar' => 'standard',
-                    'input_sync' => true,
-                    'uiColor' => '#f7f7f7',
-                ),
-                'label' => "Contenu de la description",
+                'attr' => ['placeholder' => "Mettez le contenu de l'article"]
             ])
             //->add('article_created_at') put datetime at the moment
-            ->add('category', EntityType::class, [
-                'label' => "Choississez la catégorie correspondant à l'article",
+            ->add('tags', EntityType::class, [
+                'label' => "Choississez le tag correspondant à l'article",
                 'required' => false,
-                'class' => Category::class,
+                'class' => Tag::class,
                 'choice_label' => 'name',
-                //'multiple' => true
-            ])
-            ->add('subcategory', EntityType::class, [
-                'label' => "Choississez la sous-catégorie correspondant à l'article",
-                'required' => false,
-                'class' => SubCategory::class,
-                'choice_label' => 'title',
-                //'multiple' => true
+                'multiple' => true,
+                'mapped' => false
             ])
             //->add('users') only if multiple users, just for one select admin
         ;
