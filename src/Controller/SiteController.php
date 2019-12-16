@@ -4,7 +4,12 @@
 namespace App\Controller;
 
 
+use App\Repository\ArticleRepository;
+use App\Repository\TagRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SiteController extends AbstractController
@@ -12,9 +17,71 @@ class SiteController extends AbstractController
 
     /**
      * @Route("/", name="home")
+     * @param ArticleRepository $articleRepository
+     * @param TagRepository $tagRepository
+     * @return Response
      */
-    public function home()
+    public function home(ArticleRepository $articleRepository, TagRepository $tagRepository): Response
     {
-        return $this->render('site/home.html.twig');
+        return $this->render('site/home.html.twig',[
+            'tags' => $tagRepository->findAll(),
+            'articles' => $articleRepository->findLatest(4)
+        ]);
+    }
+
+    /**
+     * @Route("categorie/{slugcat}", name="categorie_show")
+     * @param ArticleRepository $articleRepository
+     * @param TagRepository $categoryRepository
+     * @param PaginatorInterface $paginator
+     * @param Request $request
+     * @return Response
+     */
+    public function showCategorie(
+        ArticleRepository $articleRepository,
+        TagRepository $categoryRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response
+    {
+        $slugcat = $request->attributes->get('slugcat');
+//        dd($slugcat);
+        $idcat = $categoryRepository->findByName($slugcat);
+//        dd($idcat);
+        $category = $categoryRepository->find($idcat);
+//        dd($articleRepository->findByCategory($category));
+//        try test with articles
+        if($articleRepository->findByCategory($category) !== null) {
+            $articles = $paginator->paginate(
+                $articleRepository->findByCategory($category),
+                $request->query->getInt('page', 1),
+                10);
+
+            return $this->render('site/tags/show.html.twig', [
+                'catName' => $slugcat,
+                'tags' => $categoryRepository->findAll(),
+                'articles' => $articles
+            ]);
+        }else{
+            $articles = null;
+            return $this->render('site/tags/show.html.twig', [
+                'catName' => $slugcat,
+                'tags' => $categoryRepository->findAll(),
+                'articles' => $articles,
+                'category' => $category = $categoryRepository->find($idcat)
+            ]);
+        }
+    }
+
+    /**
+     * @Route("/contact", name="contact")
+     * @param TagRepository $tagRepository
+     * @return Response
+     */
+    public function contact(TagRepository $tagRepository)
+    {
+        return $this->render('site/contact.html.twig',[
+            'tags' => $tagRepository->findAll()
+        ]);
     }
 }

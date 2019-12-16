@@ -6,12 +6,17 @@
                 <p class="text-justify">Une demande particulière ? N'hésitez-pas à me contacter !</p>
             </div>
             <div class="col-4 text-center">
-                <img src="{{ asset('assets/logo/logo-lettres-90px.png') }}" alt="">
+                <img src="{{ asset('assets/logo/logo-lettres-90px.png') }}" alt="logo sylvain guerrin freelance">
             </div>
             <div class="col-4 text-center">
                 <h3>Plan du site</h3>
-                <a href="#">Accueil</a> <br>
-                <a href="#">Contact</a>
+                <a href="{{ path('home') }}">Accueil</a> <br>
+                {% if tags is not empty %}
+                    {% for tag in tags %}
+                        <a href="#">{{ tag.name }}</a> <br>
+                    {% endfor %}
+                {% endif %}
+                <a href="{{ path('contact') }}">Contact</a>
             </div>
         </div>
     </div>

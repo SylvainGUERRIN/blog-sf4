@@ -30,8 +30,8 @@ class TagRepository extends ServiceEntityRepository
     public function findByName($value)
     {
         return $this->createQueryBuilder('t')
-            ->select('c.id')
-            ->andWhere('t.name = :val')
+            ->select('t.id')
+            ->Where('t.slug = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();

@@ -77,17 +77,37 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+//    /**
+//     * @param $value
+//     * @return mixed
+//     */
+//    public function findByCategory($value)
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.tags = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getResult();
+//    }
+
     /**
      * @param $value
      * @return mixed
      */
     public function findByCategory($value)
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.category = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getResult();
+        $query = $this->getEntityManager()
+            ->createQuery('
+                SELECT a FROM App\Entity\Article a
+                JOIN a.tags t
+                WHERE t.name = :tname')
+            ->setParameter('tname', $value);
+        $query->getResult();
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.tags = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getResult();
     }
 
     /**

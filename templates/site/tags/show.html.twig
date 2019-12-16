@@ -1,0 +1,54 @@
+{% extends 'site/partials/base.html.twig' %}
+{% block title %}{{ catName }}{% endblock %}
+
+{% block body %}
+    <div class="container mb-5">
+        <div class="row mt-5 mb-3">
+            <div class="col-12 text-center">
+                <h1 class="categorie-title">{{ catName }}</h1>
+                <p>Description : {{ category.description }}</p>
+            </div>
+        </div>
+        <div class="row mt-5 mb-5">
+            {% if articles is not empty and articles is not null %}
+                {% for article in articles %}
+                    <div class="col-12 col-md-6 col-lg-4 mb-3 display-card">
+                        <div class="card border-color" style="max-width: 20rem;">
+                            <div class="card-header">
+{#                                {% if vich_uploader_asset(article, 'imageFile') is not null %}#}
+{#                                    <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-vignette">#}
+{#                                {% else %}#}
+{#                                    trouver img par défaut#}
+{#                                    <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut">#}
+{#                                {% endif %}#}
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="white-title text-center">{{ article.title }}</h3>
+{#                                <p class="card-text">{{ article.content|truncate(125,true)|raw }}...</p>#}
+                                <a class="btn btn-color" href="{{ path('show_article', {'slug': article.slug}) }}">En savoir plus</a>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>Crée le {{ article.articleCreatedAt | date('d/m/Y') }} à {{ article.articleCreatedAt | date('H:i:s') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <p>Cette catégorie n'a pas encore d'articles</p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-12 nav-pagination">
+                {% if articles is not empty and articles is not null %}
+                    {{ knp_pagination_render(articles) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
