@@ -87,7 +87,15 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-12">
-                                    <p>Tags: faire une boucle</p>
+                                    <p>Tags:
+                                    {% if article.tags is not null %}
+                                        {% for tag in article.tags %}
+                                            {{ tag.name }} <br>
+                                        {% endfor %}
+                                    {% else %}
+                                        Cet article n'a pas encore de catégorie
+                                    {% endif %}
+                                    </p>
                                 </div>
                             </div>
                             <div class="row">

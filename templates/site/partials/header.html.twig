@@ -1,8 +1,12 @@
+{% set current = app.request.attributes.get("_route") %}
+{% if catSlug is defined %}
+    {% set category = catSlug %}
+{% endif %}
 <div class="top-bar">
     <div class="container">
         <div class="top-bar-list">
             <div class="top-bar-item">
-                <a href="#">Sylvain Guerrin</a>
+                <a href="https://www.sylvain-guerrin.fr" target="_blank">Sylvain Guerrin</a>
             </div>
             <div class="top-bar-item">
                 <img src="" alt="">
@@ -18,24 +22,24 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ path('home') }}">Le Blog</a>
+            <a class="navbar-brand" href="{{ path('home') }}"><img src="{{ asset('assets/logo/logo-map.png') }}" alt="logo Sylvain Guerrin freelance"> Le Blog</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ path('home') }}">Accueil <span class="sr-only">(current)</span></a>
+                    <li class="nav-item {% if current == 'home' %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('home') }}">Accueil </a>
                     </li>
                     {% if tags is not empty %}
                         {% for tag in tags %}
-                            <li class="nav-item">
+                            <li class="nav-item{% if category is defined and category == tag.slug %} active{% endif %}">
                                 <a class="nav-link" href="{{ path('categorie_show', {'slugcat': tag.slug}) }}">{{ tag.name }}</a>
                             </li>
                         {% endfor %}
                     {% endif %}
-                    <li class="nav-item">
+                    <li class="nav-item {% if current == 'contact' %}active{% endif %}">
                         <a class="nav-link" href="{{ path('contact') }}">Contact</a>
                     </li>
                 </ul>

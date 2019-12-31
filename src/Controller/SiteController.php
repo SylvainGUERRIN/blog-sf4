@@ -38,7 +38,6 @@ class SiteController extends AbstractController
      * @return Response
      */
     public function showCategorie(
-        ArticleRepository $articleRepository,
         TagRepository $categoryRepository,
         PaginatorInterface $paginator,
         Request $request
@@ -49,28 +48,56 @@ class SiteController extends AbstractController
         $idcat = $categoryRepository->findByName($slugcat);
 //        dd($idcat);
         $category = $categoryRepository->find($idcat);
-//        dd($articleRepository->findByCategory($category));
+//        dd($category);
+//        dd($articleRepository->findByCategory($category->getName()));
+        $testArticles = $category->getArticles();
+//        dd($category->getArticles());
 //        try test with articles
-        if($articleRepository->findByCategory($category) !== null) {
+        if($testArticles !== null) {
             $articles = $paginator->paginate(
-                $articleRepository->findByCategory($category),
+                $categoryRepository->find($idcat)->getArticles(),
                 $request->query->getInt('page', 1),
-                10);
-
-            return $this->render('site/tags/show.html.twig', [
-                'catName' => $slugcat,
-                'tags' => $categoryRepository->findAll(),
-                'articles' => $articles
-            ]);
+                9);
         }else{
             $articles = null;
-            return $this->render('site/tags/show.html.twig', [
-                'catName' => $slugcat,
-                'tags' => $categoryRepository->findAll(),
-                'articles' => $articles,
-                'category' => $category = $categoryRepository->find($idcat)
-            ]);
         }
+        return $this->render('site/tags/show.html.twig', [
+            'catName' => $category->getName(),
+            'catSlug' => $category->getSlug(),
+            'catDescription' => $category->getDescription(),
+            'tags' => $categoryRepository->findAll(),
+            'articles' => $articles
+        ]);
+    }
+
+    /**
+     * @Route("article/{slugarticle}", name="show_article")
+     * @param ArticleRepository $articleRepository
+     * @param TagRepository $categoryRepository
+     * @param PaginatorInterface $paginator
+     * @param Request $request
+     * @return Response
+     */
+    public function showArticle(
+        ArticleRepository $articleRepository,
+        TagRepository $categoryRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response
+    {
+        $slugarticle = $request->attributes->get('slugarticle');
+////        dd($slugcat);
+//        $idcat = $categoryRepository->findByName($slugcat);
+////        dd($idcat);
+//        $category = $categoryRepository->find($idcat);
+//        dd($articleRepository->findByCategory($category));
+//        try test with articles
+
+        return $this->render('site/articles/show.html.twig', [
+            'tags' => $categoryRepository->findAll(),
+            'article' => $articleRepository->findOneByName($slugarticle)
+//            'category' => $category = $categoryRepository->find($idcat)
+        ]);
     }
 
     /**
