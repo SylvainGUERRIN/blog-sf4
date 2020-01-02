@@ -108,6 +108,22 @@ class ArticleRepository extends ServiceEntityRepository
     /**
      * @param $value
      * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function findOneBySlug($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.slug = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+//            ->getResult()
+            ;
+    }
+
+    /**
+     * @param $value
+     * @return mixed
      */
     public function findOneByID($value)
     {

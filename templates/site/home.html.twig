@@ -5,4 +5,85 @@
     <div class="header text-center">
         <h1 class="text-white">Bienvenue</h1>
     </div>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-xs-12 col-lg-8">
+                <div class="row">
+                    {% for article in articles %}
+                        <div class="col-xs-12 col-md-4 mb-5">
+                            <div class="card">
+                                <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
+                                    {% if vich_uploader_asset(article, 'imageFile') is not null %}
+                                        <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-article-home card-img-top">
+                                    {% else %}
+                                        <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut" class="card-img-top">
+                                    {% endif %}
+                                </a>
+                                <div class="card-body text-center">
+                                    <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
+                                        <h2 class="card-text">{{ article.title|capitalize }}</h2>
+                                    </a>
+                                    <p>Crée le {{ article.articleCreatedAt | date('d/m/Y') }}</p>
+                                </div>
+                                <div class="form-card-footer"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h1>Le référencement</h1>
+                    </div>
+                    {% for refArticle in refArticles %}
+                        <div class="col-xs-12 col-md-4 mb-5">
+                            <div class="card">
+                                <a href="{{ path('show_article',{'slugarticle': refArticle.slug}) }}">
+                                    {% if vich_uploader_asset(refArticle, 'imageFile') is not null %}
+                                        <img src="{{ vich_uploader_asset( refArticle, 'imageFile') }}" alt="image de l'article" class="img-article-home card-img-top">
+                                    {% else %}
+                                        <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut" class="card-img-top">
+                                    {% endif %}
+                                </a>
+                                <div class="card-body text-center">
+                                    <a href="{{ path('show_article',{'slugarticle': refArticle.slug}) }}">
+                                        <h2 class="card-text">{{ refArticle.title|capitalize }}</h2>
+                                    </a>
+                                    <p>Crée le {{ refArticle.articleCreatedAt | date('d/m/Y') }}</p>
+                                </div>
+                                <div class="form-card-footer"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-xs-12 col-lg-4 text-center">
+                <img src="{{ asset('assets/images/photo_perso_300px.png') }}" alt="photo auteur du blog" class="photo-auteur">
+                <h3>A propos de l'auteur</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, architecto asperiores dignissimos
+                    dolor dolores explicabo fugit illo incidunt minima non officiis omnis, possimus quasi reprehenderit sapiente
+                    soluta, tenetur. Harum, vitae?</p>
+                <a href="{{ path('contact') }}" class="btn btn-color mb-3">Demander un devis</a>
+                <h3 class="text-center">Les derniers articles</h3>
+                {% for article in articles %}
+                    <div class="row mb-3">
+                        <div class="col-6 text-center">
+                            <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
+                                {% if vich_uploader_asset(article, 'imageFile') is not null %}
+                                    <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-post-home-mini card-img-top">
+                                {% else %}
+                                    <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut" class="card-img-top">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
+                                <h5 class="card-text mt-3">{{ article.title|capitalize }}</h5>
+                            </a>
+                            <p>Crée le {{ article.articleCreatedAt | date('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

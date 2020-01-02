@@ -1,0 +1,53 @@
+{% if app.request.attributes.get("_route") == 'activation_commentaire' or app.request.attributes.get("_route") == 'desactivation_commentaire' %}
+    {% for comment in comments %}
+    <tr>
+        <td>{{ comment.name }}</td>
+        <td>{{ comment.commentCreatedAt | date("d/m/Y H:i:s") }}</td>
+        <td>{{ comment.article.title }}</td>
+        <td>{{ comment.content | slice(0,30) }}...</td>
+
+        <td>
+            <a id="{{ comment.id }}" href="" class="btn btn-primary
+                                        {% if comment.activation == 1 %}disabled{% endif %} activation">
+                <i class="fas fa-edit"></i>
+            </a>
+        </td>
+        <td>
+            <a id="{{ comment.id }}" href="" class="btn btn-primary
+                                        {% if comment.activation == 0 %}disabled{% endif %} desactivation">
+                <i class="fas fa-edit"></i>
+            </a>
+        </td>
+        <td>
+            <a href="{{ path('comment_delete', {'id': comment.id}) }}" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td>{{ comment.name }}</td>
+        <td>{{ comment.commentCreatedAt | date("d/m/Y H:i:s") }}</td>
+        <td>{{ comment.article.title }}</td>
+        <td>{{ comment.content | slice(0,30) }}...</td>
+
+        <td>
+            <a id="{{ comment.id }}" href="{# {{ path('article_edit', {'slug': article.slug}) }} #}" class="btn btn-primary
+                                        {% if comment.activation == 1 %}disabled{% endif %} activation">
+                <i class="fas fa-edit"></i>
+            </a>
+        </td>
+        <td>
+            <a id="{{ comment.id }}" href="{# {{ path('article_edit', {'slug': article.slug}) }} #}" class="btn btn-primary
+                                        {% if comment.activation == 0 %}disabled{% endif %} desactivation">
+                <i class="fas fa-edit"></i>
+            </a>
+        </td>
+        <td>
+            <a href="{{ path('comment_delete', {'id': comment.id}) }}" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+{% endif %}

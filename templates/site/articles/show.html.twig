@@ -1,8 +1,65 @@
 {% extends 'site/partials/base.html.twig' %}
-{% block title %}{{ catName }}{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
     <div class="header text-center">
-        <h1 class="text-white">{{ article.title }}</h1>
+        <h1 class="text-white">{{ article.title|capitalize }}</h1>
+    </div>
+    <div class="container">
+        <div class="row mt-5 mb-5">
+            <div class="col-xs-12 col-md-4">
+                {% if vich_uploader_asset(article, 'imageFile') is not null %}
+                    <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-article">
+                {% else %}
+                    <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut">
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-md-8">
+                <p>{{ article.content }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <p>Auteur: {{ article.user.username }} <br> Publié le: {{ article.articleCreatedAt| date('d/m/Y') }}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 mt-5 mb-5">
+                <h2 class="text-center mb-3">Laissez un commentaire</h2>
+                {{ form_start(form) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.mail) }}
+                {{ form_row(form.content) }}
+                <button type="submit" class="btn btn-primary">Commentez !</button>
+                {{ form_end((form)) }}
+            </div>
+        </div>
+        <div class="row mt-3 text-center">
+            {% if comments is empty %}
+                <div class="col-12 text-center alert alert-light">
+                    <h3>Commentaires: </h3>
+                    <p>Cet article n'a pas encore de commentaires</p>
+                </div>
+            {% else %}
+                <div class="col-12 text-center mb-5">
+                <h3 class="mb-5">Commentaires: </h3>
+                {% for comment in comments %}
+                    {% if comment.activation == true %}
+                        <div class="block-comment mb-5">
+                        <h6>Le {{ comment.commentCreatedAt | date('d/m/Y') }} à {{ comment.commentCreatedAt | date('H:m:i') }}
+                            commentaire de {{ comment.name }}</h6>
+                        <p>{{ comment.content }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-12 nav-pagination">
+                {{ knp_pagination_render(comments) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

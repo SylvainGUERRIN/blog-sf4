@@ -4,8 +4,15 @@
 namespace App\Controller;
 
 
+use App\Entity\Article;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentRepository;
 use App\Repository\TagRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\ORMException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,15 +30,20 @@ class SiteController extends AbstractController
      */
     public function home(ArticleRepository $articleRepository, TagRepository $tagRepository): Response
     {
+
+        $idcat = $tagRepository->findByName('référencement');
+        $category = $tagRepository->find($idcat);
+        $refArticles = $category->getArticles();
+
         return $this->render('site/home.html.twig',[
             'tags' => $tagRepository->findAll(),
-            'articles' => $articleRepository->findLatest(4)
+            'articles' => $articleRepository->findLatest(6),
+            'refArticles' => $refArticles
         ]);
     }
 
     /**
      * @Route("categorie/{slugcat}", name="categorie_show")
-     * @param ArticleRepository $articleRepository
      * @param TagRepository $categoryRepository
      * @param PaginatorInterface $paginator
      * @param Request $request
@@ -44,15 +56,9 @@ class SiteController extends AbstractController
     ): Response
     {
         $slugcat = $request->attributes->get('slugcat');
-//        dd($slugcat);
         $idcat = $categoryRepository->findByName($slugcat);
-//        dd($idcat);
         $category = $categoryRepository->find($idcat);
-//        dd($category);
-//        dd($articleRepository->findByCategory($category->getName()));
         $testArticles = $category->getArticles();
-//        dd($category->getArticles());
-//        try test with articles
         if($testArticles !== null) {
             $articles = $paginator->paginate(
                 $categoryRepository->find($idcat)->getArticles(),
@@ -74,29 +80,57 @@ class SiteController extends AbstractController
      * @Route("article/{slugarticle}", name="show_article")
      * @param ArticleRepository $articleRepository
      * @param TagRepository $categoryRepository
+     * @param CommentRepository $commentRepository
      * @param PaginatorInterface $paginator
      * @param Request $request
      * @return Response
+     * @throws NonUniqueResultException
      */
     public function showArticle(
         ArticleRepository $articleRepository,
         TagRepository $categoryRepository,
+        CommentRepository $commentRepository,
         PaginatorInterface $paginator,
         Request $request
     ): Response
     {
         $slugarticle = $request->attributes->get('slugarticle');
-////        dd($slugcat);
-//        $idcat = $categoryRepository->findByName($slugcat);
-////        dd($idcat);
-//        $category = $categoryRepository->find($idcat);
-//        dd($articleRepository->findByCategory($category));
-//        try test with articles
+        $article = $articleRepository->findOneBySlug($slugarticle);
+        $idArticle = $article->getId();
+//        $comments = $commentRepository->findByID($idArticle);
+        $comments = $paginator->paginate(
+            $commentRepository->findByID($idArticle),
+            $request->query->getInt('page', 1),
+            10);
+
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $comment->setArticle($articleRepository->findOneBySlug($slugarticle));
+            $comment->setCommentCreatedAt(new \DateTime());
+            $comment->setActivation(0);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre commentaire à été ajouté ! Nous le traiteront dans les plus brefs délais.'
+            );
+            return $this->redirectToRoute('show_article', [
+                'slugarticle' => $article->getSlug(),
+            ]);
+        }
 
         return $this->render('site/articles/show.html.twig', [
             'tags' => $categoryRepository->findAll(),
-            'article' => $articleRepository->findOneByName($slugarticle)
-//            'category' => $category = $categoryRepository->find($idcat)
+            'article' => $article,
+            'form' => $form->createView(),
+            'comments' => $comments
         ]);
     }
 

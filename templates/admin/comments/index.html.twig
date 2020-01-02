@@ -14,33 +14,10 @@
                         <th>suspendre</th>
                         <th>supprimer</th>
                     </thead>
-                    <tbody>
+                    <tbody id="ajax-call">
                     {% if comments is not null and comments is not empty %}
                         {% for comment in comments %}
-                            <tr>
-                                <td>{{ comment.user.username }}</td>
-                                <td>{{ comment.commentCreatedAt | date("d/m/Y H:i:s") }}</td>
-                                <td>{{ comment.article.title }}</td>
-                                <td>{{ comment.content | slice(0,30) }}...</td>
-
-                                <td>
-                                    <a id="{{ comment.id }}" href="{# {{ path('article_edit', {'slug': article.slug}) }} #}" class="btn btn-primary
-                                    {% if comment.activation == 1 %}disabled{% endif %} activation">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a id="{{ comment.id }}" href="{# {{ path('article_edit', {'slug': article.slug}) }} #}" class="btn btn-primary
-                                    {% if comment.activation == 0 %}disabled{% endif %} desactivation">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="{{ path('comment_delete', {'id': comment.id}) }}" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            {% include 'admin/partials/commentTab.html.twig' %}
                         {% endfor %}
                     {% else %}
                         <tr>
@@ -57,4 +34,7 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/commentActivation.js') }}"></script>
 {% endblock %}

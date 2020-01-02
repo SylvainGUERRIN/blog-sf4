@@ -7,11 +7,11 @@
         <p class="text-white">{{ catDescription }}</p>
     </div>
     <div class="container mt-5 mb-5">
-        <div class="row mt-5 mb-5">
+        <div class="row mt-5 mb-5 card-stretch">
             {% if articles is not empty and articles is not null %}
                 {% for article in articles %}
-                    <div class="col-12 col-md-6 col-lg-4 mb-3 display-card">
-                        <div class="card border-color" style="max-width: 20rem;">
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
+                        <div class="card border-color">
                             <div class="card-header text-center">
                                 {% if vich_uploader_asset(article, 'imageFile') is not null %}
                                     <img src="{{ vich_uploader_asset( article, 'imageFile')| imagine_filter('medium') }}" alt="image de l'article" class="img-vignette">
@@ -20,13 +20,24 @@
                                 {% endif %}
                             </div>
                             <div class="card-body text-center">
-                                <h3 class="white-title text-center">{{ article.title }}</h3>
-                                <p class="card-text">{{ article.content|raw }}...</p>
-                                <a class="btn btn-color" href="{{ path('show_article', {'slugarticle': article.slug}) }}">En savoir plus</a>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h3 class="white-title text-center">{{ article.title|capitalize }}</h3>
+                                        <p class="card-text mb-3">{{ article.content|raw|slice(0, 50) }}...</p>
+                                        <a class="btn btn-color ml-5 mr-5 mb-3" href="{{ path('show_article', {'slugarticle': article.slug}) }}">En savoir plus</a>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="form-card-footer"></div>
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col-12 text-center">
+                                        <p>Auteur: {{ article.user.username }}</p>
+                                        <p>Tags:
+                                            {% for tag in article.tags %}
+                                                <a href="{{ path('categorie_show', {'slugcat': tag.slug}) }}">{{ tag.name }}</a> <br>
+                                            {% endfor %}
+                                        </p>
                                         <p>Crée le {{ article.articleCreatedAt | date('d/m/Y') }}</p>
                                     </div>
                                 </div>
