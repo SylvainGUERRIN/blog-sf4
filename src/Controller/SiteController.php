@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\CommentType;
+use App\Form\ContactType;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
 use App\Repository\TagRepository;
@@ -14,9 +15,13 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SiteController extends AbstractController
@@ -136,13 +141,50 @@ class SiteController extends AbstractController
 
     /**
      * @Route("/contact", name="contact")
+     * @param Request $request
      * @param TagRepository $tagRepository
      * @return Response
      */
-    public function contact(TagRepository $tagRepository)
+    public function contact(Request $request, TagRepository $tagRepository)
     {
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $username = $form['name']->getData();
+            $usermail = $form['mail']->getData();
+            $userphone = $form['phone']->getData();
+            $usermsg = $form['message']->getData();
+
+            $email = (new TemplatedEmail())
+                ->from('contact@sylvain-guerrin.fr')
+                ->to($usermail)
+                ->subject('Demande de contact')
+                ->text('Demande de contact provenant du blog sylvain guerrin')
+                ->htmlTemplate('emails/contact.html.twig')
+                ->context([
+                    'username' => $username,
+                    'email' => $usermail,
+                    'phone' => $userphone,
+                    'msg' => $usermsg
+                ])
+            ;
+
+            $transport = new EsmtpTransport('localhost');
+            $mailer = new Mailer($transport);
+            $mailer->send($email);
+
+            $this->addFlash(
+                'success',
+                'Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !'
+            );
+
+            return $this->redirectToRoute('home');
+        }
+
         return $this->render('site/contact.html.twig',[
-            'tags' => $tagRepository->findAll()
+            'tags' => $tagRepository->findAll(),
+            'form' => $form->createView()
         ]);
     }
 }
