@@ -1,0 +1,13 @@
+<h1>Demande provenant du blog Sylvain Guerrin freelance</h1>
+
+<h3>Nom :  {{ username }}</h3>
+
+<h5>Son email pour le contacter: {{ mail }}</h5>
+
+{% if phone is empty or phone is null %}
+<h5>La personne n'a pas donner son numéro de téléphone</h5>
+{% else %}
+<h5>Son numéro de téléphone: {{ phone }}</h5>
+{% endif %}
+
+<p>{{ msg }}</p>
