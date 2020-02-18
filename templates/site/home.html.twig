@@ -44,45 +44,6 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <h1 class="text-center">Le référencement</h1>
-                    </div>
-                    {% for refArticle in refArticles %}
-                        <div class="col-xs-12 col-md-6 mb-5">
-                            <div class="card">
-                                <a href="{{ path('show_article',{'slugarticle': refArticle.slug}) }}">
-                                    {% if vich_uploader_asset(refArticle, 'imageFile') is not null %}
-                                        <img src="{{ vich_uploader_asset( refArticle, 'imageFile') }}" alt="image de l'article" class="img-article-home card-img-top">
-                                    {% else %}
-                                        <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut" class="card-img-top">
-                                    {% endif %}
-                                </a>
-                                <div class="card-body text-center">
-                                    <a href="{{ path('show_article',{'slugarticle': refArticle.slug}) }}">
-                                        <h2 class="card-text">{{ refArticle.title|capitalize }}</h2>
-                                    </a>
-                                    <p>Crée le {{ refArticle.articleCreatedAt | date('d/m/Y') }}</p>
-                                    <a class="btn btn-color ml-5 mr-5 mb-3" href="{{ path('show_article', {'slugarticle': refArticle.slug}) }}">En savoir plus</a>
-                                </div>
-                                <div class="form-card-footer"></div>
-                                <div class="card-footer">
-                                    <div class="row">
-                                        <div class="col-12 text-center">
-                                            <p>Auteur: {{ refArticle.user.username }}</p>
-                                            <p>Tags:
-                                                {% for tag in refArticle.tags %}
-                                                    <a href="{{ path('categorie_show', {'slugcat': tag.slug}) }}">{{ tag.name }}</a> <br>
-                                                {% endfor %}
-                                            </p>
-                                            <p>Crée le {{ refArticle.articleCreatedAt | date('d/m/Y') }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
             </div>
             <div class="col-xs-12 col-lg-4 text-center">
                 <img src="{{ asset('assets/images/photo_perso_300px.png') }}" alt="photo auteur du blog" class="photo-auteur">
@@ -91,7 +52,7 @@
                     dolor dolores explicabo fugit illo incidunt minima non officiis omnis, possimus quasi reprehenderit sapiente
                     soluta, tenetur. Harum, vitae?</p>
                 <a href="{{ path('contact') }}" class="btn btn-color mb-3">Demander un devis</a>
-                <h3 class="text-center mt-5">Articles les plus suivis</h3>
+                <h3 class="text-center mt-5 mb-3">Articles les plus suivis</h3>
                 {% for article in articles %}
                     <div class="row mb-3">
                         <div class="col-6 text-center">
@@ -110,6 +71,10 @@
                             <p>Crée le {{ article.articleCreatedAt | date('d/m/Y') }}</p>
                         </div>
                     </div>
+                {% endfor %}
+                <h3 class="text-center mt-5 mb-3">Les catégories</h3>
+                {% for tag in tags %}
+                    <a class="btn btn-color mb-2" href="{{ path('categorie_show', {'slugcat': tag.slug}) }}">{{ tag.name }}</a>
                 {% endfor %}
             </div>
         </div>

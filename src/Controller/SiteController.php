@@ -37,15 +37,14 @@ class SiteController extends AbstractController
      */
     public function home(ArticleRepository $articleRepository, TagRepository $tagRepository): Response
     {
-
-        $idcat = $tagRepository->findByName('référencement');
-        $category = $tagRepository->find($idcat);
-        $refArticles = $category->getArticles();
+//        $idcat = $tagRepository->findByName('référencement');
+//        $category = $tagRepository->find($idcat);
+//        $refArticles = $category->getArticles();
 
         return $this->render('site/home.html.twig',[
             'tags' => $tagRepository->findAll(),
             'articles' => $articleRepository->findLatest(6),
-            'refArticles' => $refArticles
+//            'refArticles' => $refArticles
         ]);
     }
 
