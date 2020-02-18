@@ -6,11 +6,11 @@
                 <p class="text-justify">Une demande particulière ? N'hésitez-pas à me contacter !</p>
                 <div class="row">
                     <div class="col-6">
-                        <a href="tel:0643152243" class="coord-icon"><img src="assets/icones/smartphone-only-white.png" alt="icone smartphone"></a>
+                        <a href="tel:0643152243" class="coord-icon"><img src="{{ asset('assets/icones/smartphone-only-white.png') }}" alt="icone smartphone"></a>
                         <a href="tel:0643152243"><p class="coord-icon">06 43 15 22 43</p></a>
                     </div>
                     <div class="col-6">
-                        <a href="mailto:sguerrin549@gmail.com" class="coord-icon"><img src="assets/icones/mail-only-white.png" alt="icone email"></a>
+                        <a href="mailto:sguerrin549@gmail.com" class="coord-icon"><img src="{{ asset('assets/icones/mail-only-white.png') }}" alt="icone email"></a>
                         <a href="mailto:sguerrin549@gmail.com"><p class="coord-icon">sguerrin549@gmail.com</p></a>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                 <a href="{{ path('home') }}">Accueil</a> <br>
                 {% if tags is not empty %}
                     {% for tag in tags %}
-                        <a href="#">{{ tag.name }}</a> <br>
+                        <a href="{{ path('categorie_show', {'slugcat': tag.slug}) }}">{{ tag.name }}</a> <br>
                     {% endfor %}
                 {% endif %}
                 <a href="{{ path('contact') }}">Contact</a>
