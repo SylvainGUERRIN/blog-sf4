@@ -190,4 +190,16 @@ class SiteController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/mentions-legales", name="mentions-legales")
+     * @param TagRepository $tagRepository
+     * @return Response
+     */
+    public function mentions(TagRepository $tagRepository): Response
+    {
+        return $this->render('site/mentions.html.twig',[
+            'tags' => $tagRepository->findAll(),
+        ]);
+    }
 }

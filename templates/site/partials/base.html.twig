@@ -1,9 +1,34 @@
+{% set ref_route = app.request.attributes.get("_route") %}
+{% set referencement = app.request.pathinfo %}
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <meta name="robots" content="noindex, nofollow">
         <title>{% block title %}Blog{% endblock %}</title>
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('assets/favicon/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('assets/favicon/site.webmanifest') }}">
+        <link rel="mask-icon" href="{{ asset('assets/favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+        <!-- Référencement -->
+        <meta name="robots" content="noindex, nofollow"><!-- a changer une fois en ligne -->
+        {% if ref_route == "home" %}
+            <link rel="canonical" href="https://www.nom-site.fr/">
+            <meta name="description" content="">
+        {% elseif ref_route == "categorie_show" %}
+            <link rel="canonical" href="https://www.nom-site.fr{{ referencement }}">
+            <meta name="description" content="">
+        {% elseif ref_route == "show_article" %}
+            <link rel="canonical" href="https://www.nom-site.fr{{ referencement }}">
+            <meta name="description" content="">
+        {% elseif ref_route == "contact" %}
+            <link rel="canonical" href="https://www.nom-site.fr{{ referencement }}">
+            <meta name="description" content="">
+        {% endif %}
+        <!-- Liens CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
