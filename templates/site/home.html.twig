@@ -23,7 +23,8 @@
                                     <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
                                         <h2 class="card-text">{{ article.title|capitalize }}</h2>
                                     </a>
-                                    <p class="card-text mb-3 mt-3 text-justify pl-3 pr-3">{{ article.content|raw|slice(0, 200) }}...</p>
+{#                                    <p class="card-text mb-3 mt-3 text-justify pl-3 pr-3">{{ article.content|raw|slice(0, 200) }}...</p>#}
+                                    <p class="card-text mb-3 mt-3 text-justify pl-3 pr-3">{{ article.content|u.truncate(200,true)|raw }}...</p>
                                     <a class="btn btn-color ml-5 mr-5 mb-3" href="{{ path('show_article', {'slugarticle': article.slug}) }}">En savoir plus</a>
                                 </div>
                                 <div class="form-card-footer"></div>
