@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Article;
 use App\Entity\Tag;
 use App\Entity\User;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -45,14 +46,17 @@ class ArticleEditType extends AbstractType
                     ])
                 ]
             ])
-            ->add('content', TextareaType::class, [
+            ->add('content', CKEditorType::class, [
+                'config' => array(
+                    'toolbar' => 'standard',
+                    'input_sync' => true,
+                    'uiColor' => '#f7f7f7',
+                ),
                 'label' => "Contenu de l'article",
-                'attr' => ['placeholder' => "Mettez le contenu de l'article"]
             ])
             ->add('article_created_at', DateTimeType::class, [
                 'label' => "Date de création de l'article",
             ])
-            //->add('article_modified_at') enregistrer automatiquement à la validation du formulaire
             ->add('tags', EntityType::class, [
                 'label' => "Choississez le tag correspondant à l'article",
                 'required' => false,

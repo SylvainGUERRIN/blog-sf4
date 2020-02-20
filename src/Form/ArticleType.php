@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Article;
 use App\Entity\Tag;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -44,24 +45,25 @@ class ArticleType extends AbstractType
                     ])
                 ]
             ])
-            ->add('content', TextareaType::class, [
+            ->add('content', CKEditorType::class, [
+                'config' => array(
+                    'toolbar' => 'standard',
+                    'input_sync' => true,
+                    'uiColor' => '#f7f7f7',
+                ),
                 'label' => "Contenu de l'article",
-                'attr' => ['placeholder' => "Mettez le contenu de l'article"]
             ])
             ->add('refDescription', TextType::class, [
                 'label' => "Choississez la description pour le référencement de l'article",
                 'required' => false,
             ])
-            //->add('article_created_at') put datetime at the moment
             ->add('tags', EntityType::class, [
                 'label' => "Choississez le tag correspondant à l'article",
                 'required' => false,
                 'class' => Tag::class,
                 'choice_label' => 'name',
-                'multiple' => true,
-//                'mapped' => false
+                'multiple' => true
             ])
-            //->add('users') only if multiple users, just for one select admin
         ;
     }
 
