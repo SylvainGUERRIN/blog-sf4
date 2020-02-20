@@ -60,6 +60,10 @@ class ArticleEditType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => true
             ])
+            ->add('refDescription', TextType::class, [
+                'label' => "Choississez la description pour le référencement de l'article",
+                'required' => false,
+            ])
             ->add('user', EntityType::class,[
                 'label' => "Choississez l'auteur de l'article",
                 'required' => false,

@@ -103,6 +103,8 @@ class SiteController extends AbstractController
         $slugarticle = $request->attributes->get('slugarticle');
         $article = $articleRepository->findOneBySlug($slugarticle);
         $idArticle = $article->getId();
+        $articleTags = $article->getTags();
+//        dd($articleTags);
 //        $comments = $commentRepository->findByID($idArticle);
         $comments = $paginator->paginate(
             $commentRepository->findByID($idArticle),
@@ -135,6 +137,7 @@ class SiteController extends AbstractController
         return $this->render('site/articles/show.html.twig', [
             'tags' => $categoryRepository->findAll(),
             'article' => $article,
+            'articleTags' => $articleTags,
             'form' => $form->createView(),
             'comments' => $comments
         ]);

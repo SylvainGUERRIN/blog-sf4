@@ -84,6 +84,11 @@ class Article
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ref_description;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -276,5 +281,17 @@ class Article
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->title);
         }
+    }
+
+    public function getRefDescription(): ?string
+    {
+        return $this->ref_description;
+    }
+
+    public function setRefDescription(?string $ref_description): self
+    {
+        $this->ref_description = $ref_description;
+
+        return $this;
     }
 }

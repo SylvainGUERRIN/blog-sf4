@@ -48,6 +48,10 @@ class ArticleType extends AbstractType
                 'label' => "Contenu de l'article",
                 'attr' => ['placeholder' => "Mettez le contenu de l'article"]
             ])
+            ->add('refDescription', TextType::class, [
+                'label' => "Choississez la description pour le référencement de l'article",
+                'required' => false,
+            ])
             //->add('article_created_at') put datetime at the moment
             ->add('tags', EntityType::class, [
                 'label' => "Choississez le tag correspondant à l'article",
@@ -55,7 +59,7 @@ class ArticleType extends AbstractType
                 'class' => Tag::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'mapped' => false
+//                'mapped' => false
             ])
             //->add('users') only if multiple users, just for one select admin
         ;

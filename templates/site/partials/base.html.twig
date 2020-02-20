@@ -20,10 +20,10 @@
             <meta name="description" content="">
         {% elseif ref_route == "categorie_show" %}
             <link rel="canonical" href="https://www.nom-site.fr{{ referencement }}">
-            <meta name="description" content="">
+            <meta name="description" content="{{ catDescription }}">
         {% elseif ref_route == "show_article" %}
             <link rel="canonical" href="https://www.nom-site.fr{{ referencement }}">
-            <meta name="description" content="">
+            <meta name="description" content="{{ article.refDescription }}">
         {% elseif ref_route == "contact" %}
             <link rel="canonical" href="https://www.nom-site.fr{{ referencement }}">
             <meta name="description" content="">

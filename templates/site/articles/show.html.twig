@@ -7,19 +7,24 @@
     </div>
     <div class="container">
         <div class="row mt-5 mb-5">
-            <div class="col-xs-12 col-md-4">
+            <div class="col-md-12 col-lg-5">
                 {% if vich_uploader_asset(article, 'imageFile') is not null %}
                     <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-article">
                 {% else %}
                     <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut">
                 {% endif %}
             </div>
-            <div class="col-xs-12 col-md-8">
-                <p>{{ article.content }}</p>
+            <div class="col-md-12 col-lg-7">
+                <p class="text-justify">{{ article.content }}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-12 text-center">
+                <p>Tags:
+                    {% for articleTag in articleTags %}
+                        <a class="btn btn-color mb-3" href="{{ path('categorie_show', {'slugcat': articleTag.slug}) }}">{{ articleTag.name }}</a>
+                    {% endfor %}
+                </p>
                 <p>Auteur: {{ article.user.username }} <br> Publié le: {{ article.articleCreatedAt| date('d/m/Y') }}</p>
             </div>
         </div>

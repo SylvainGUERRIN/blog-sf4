@@ -72,7 +72,7 @@
             {% for article in articles %}
                 <div class="col-sm-12 col-md-6 col-lg-3 display-card">
                     <div class="card border-color" style="max-width: 20rem;">
-                        <div class="card-header">
+                        <div class="card-header text-center">
                             {% if vich_uploader_asset(article, 'imageFile') is not null %}
                                 <img src="{{ vich_uploader_asset( article, 'imageFile')| imagine_filter('medium') }}" alt="image de l'article" class="img-vignette">
                             {% else %}

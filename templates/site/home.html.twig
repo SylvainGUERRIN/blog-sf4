@@ -23,7 +23,7 @@
                                     <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
                                         <h2 class="card-text">{{ article.title|capitalize }}</h2>
                                     </a>
-                                    <p class="card-text mb-3">{{ article.content|raw|slice(0, 50) }}...</p>
+                                    <p class="card-text mb-3 mt-3 text-justify pl-3 pr-3">{{ article.content|raw|slice(0, 200) }}...</p>
                                     <a class="btn btn-color ml-5 mr-5 mb-3" href="{{ path('show_article', {'slugarticle': article.slug}) }}">En savoir plus</a>
                                 </div>
                                 <div class="form-card-footer"></div>
@@ -55,16 +55,16 @@
                 <h3 class="text-center mt-5 mb-3">Articles les plus suivis</h3>
                 {% for article in articles %}
                     <div class="row mb-3">
-                        <div class="col-6 text-center">
+                        <div class="col-6 text-center align-elements">
                             <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
                                 {% if vich_uploader_asset(article, 'imageFile') is not null %}
-                                    <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-post-home-mini card-img-top">
+                                    <img src="{{ vich_uploader_asset( article, 'imageFile') }}" alt="image de l'article" class="img-post-home-mini">
                                 {% else %}
-                                    <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut" class="card-img-top">
+                                    <img src="{{ asset('assets/images/img-default-article.png')| imagine_filter('medium') }}" alt="image par défaut">
                                 {% endif %}
                             </a>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 align-elements-txt">
                             <a href="{{ path('show_article',{'slugarticle': article.slug}) }}">
                                 <h5 class="card-text mt-3">{{ article.title|capitalize }}</h5>
                             </a>
