@@ -77,6 +77,22 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @method Article[]
+     * @param $catID
+     * @return mixed
+     */
+    public function findAllRecentWithTag($catID)
+    {
+
+        return $this->createQueryBuilder('a')
+            ->where('a.tags = :catID')
+            ->setParameter('catID', $catID)
+            ->orderBy('a.article_created_at','DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @param $value
 //     * @return mixed

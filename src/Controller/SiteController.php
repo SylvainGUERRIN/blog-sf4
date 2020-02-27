@@ -25,6 +25,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\Criteria;
 
 class SiteController extends AbstractController
 {
@@ -65,9 +66,22 @@ class SiteController extends AbstractController
         $idcat = $categoryRepository->findByName($slugcat);
         $category = $categoryRepository->find($idcat);
         $testArticles = $category->getArticles();
+        //in many to many use collection and order with criteria
+//        dd($idcat['id']);
+//        dd($categoryRepository->find($idcat)->getArticles()->getValues());
+        $collection = $categoryRepository->find($idcat)->getArticles();
+//        dd($collection = $categoryRepository->find($idcat)->getArticles()->getValues());
+//        dd($categoryRepository->find($idcat)->getArticles()->get('article_created_at'));
+        $criteria = new Criteria();
+        $criteria->orderBy(['article_created_at' => Criteria::DESC]);
+        $matched = $collection->matching($criteria);
+//        dd($matched);
+
         if($testArticles !== null) {
             $articles = $paginator->paginate(
-                $categoryRepository->find($idcat)->getArticles(),
+//                $categoryRepository->find($idcat)->getArticles(),
+//                $articleRepository->findAllRecentWithTag($idcat['id']),
+                $matched,
                 $request->query->getInt('page', 1),
                 9);
         }else{

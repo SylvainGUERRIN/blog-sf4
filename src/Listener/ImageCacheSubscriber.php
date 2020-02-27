@@ -3,8 +3,6 @@
 namespace App\Listener;
 
 use App\Entity\Article;
-use App\Entity\Phare;
-use App\Entity\Picture;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
