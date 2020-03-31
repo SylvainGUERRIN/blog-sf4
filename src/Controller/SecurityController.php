@@ -121,17 +121,6 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            dd($request);
-//            $uploadedFile = $form['urlavatar']->getData();
-//            if ($uploadedFile) {
-//                $file = $form->get('avatarurl')->getData();
-//                $fileId = $user->getId();
-//                $name = $user->getUsername();
-//                $finalName = $fileUploader->upload($file, $name, $fileId, $oldImage);
-//                dd($form->getData());
-//                $user->setAvatarUrl($finalName);
-//            }
-//            dd($form->getData());
 
             $user->setUpdatedAt(new DateTime('now'));
 

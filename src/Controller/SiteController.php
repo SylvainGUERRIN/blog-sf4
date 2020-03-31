@@ -66,18 +66,18 @@ class SiteController extends AbstractController
         $idcat = $categoryRepository->findByName($slugcat);
         $category = $categoryRepository->find($idcat);
         $testArticles = $category->getArticles();
-        //in many to many use collection and order with criteria
-//        dd($idcat['id']);
-//        dd($categoryRepository->find($idcat)->getArticles()->getValues());
-        $collection = $categoryRepository->find($idcat)->getArticles();
-//        dd($collection = $categoryRepository->find($idcat)->getArticles()->getValues());
-//        dd($categoryRepository->find($idcat)->getArticles()->get('article_created_at'));
-        $criteria = new Criteria();
-        $criteria->orderBy(['article_created_at' => Criteria::DESC]);
-        $matched = $collection->matching($criteria);
-//        dd($matched);
 
         if($testArticles !== null) {
+            //in many to many use collection and order with criteria
+//        dd($idcat['id']);
+//        dd($categoryRepository->find($idcat)->getArticles()->getValues());
+            $collection = $categoryRepository->find($idcat)->getArticles();
+//        dd($collection = $categoryRepository->find($idcat)->getArticles()->getValues());
+//        dd($categoryRepository->find($idcat)->getArticles()->get('article_created_at'));
+            $criteria = new Criteria();
+            $criteria->orderBy(['article_created_at' => Criteria::DESC]);
+            $matched = $collection->matching($criteria);
+//        dd($matched);
             $articles = $paginator->paginate(
 //                $categoryRepository->find($idcat)->getArticles(),
 //                $articleRepository->findAllRecentWithTag($idcat['id']),
