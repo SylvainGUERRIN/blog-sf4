@@ -26,6 +26,9 @@
     "doctrine/dbal": {
         "version": "v2.10.0"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -83,6 +86,9 @@
     },
     "egulias/email-validator": {
         "version": "2.1.11"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.5"
     },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
@@ -406,6 +412,9 @@
     },
     "symfony/property-info": {
         "version": "v4.4.0"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.9"
     },
     "symfony/routing": {
         "version": "4.2",
